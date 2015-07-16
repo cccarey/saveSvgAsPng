@@ -83,6 +83,7 @@
   out$.svgAsDataUri = function(el, options, cb) {
     options = options || {};
     options.scale = options.scale || 1;
+    options.useViewBox = options.useViewBox || false;
     var xmlns = "http://www.w3.org/2000/xmlns/";
 
     inlineImages(el, function() {
@@ -90,7 +91,9 @@
       var clone = el.cloneNode(true);
       var width, height;
       if(el.tagName == 'svg') {
-        var box = el.getBoundingClientRect();
+        var box = options.useViewBox ?
+          { width: el.viewBox.baseVal.width, height: el.viewBox.baseVal.height } :
+          el.getBoundingClientRect();
         width = box.width ||
           parseInt(clone.getAttribute('width') ||
           clone.style.width ||
